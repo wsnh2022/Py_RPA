@@ -1,22 +1,10 @@
-# PyMacroRecord
-<div align="center">
-  <a href="https://github.com/LOUDO56/PyMacroRecord/releases"><img src="https://github.com/LOUDO56/PyMacroRecord/assets/117168736/ff16ba4d-7979-4719-bb8f-78587cb5032f" alt="pmr logo"></a>
-  <p>
-    Free. Easy <br>
-    Coded with Python, PyMacroRecord is one of the best free macro recorder you will find. <br>
-    No <b>ads</b>, no <b>premium</b>, everything <b>FREE</b>
-  </p>
-  <a href="https://github.com/LOUDO56/PyMacroRecord/releases"><img alt="PyMacroRecord count download" src="https://img.shields.io/github/downloads/LOUDO56/PyMacroRecord/total?label=Downloads"/></a>
-</div>
+# PyMacroRecord (Py_RPA fork)
 
+A Python + tkinter macro recorder for Windows and Linux (X11). Records mouse movement, clicks, scrolls, and keyboard input; plays them back with configurable speed, repeat, interval, schedule, and after-playback actions.
 
-# Overview
-PyMacroRecord works with a GUI made using tkinter, making it easier for users to interact with it.
-![image](https://github.com/LOUDO56/PyMacroRecord/assets/117168736/2a1b2d0e-d950-40ad-84e2-971464058664)
+This fork ([wsnh2022/Py_RPA](https://github.com/wsnh2022/Py_RPA)) adds a workflow-oriented layer: an offline build (no network calls), a folder-scan Macro Library, post-record Save/Cancel prompt, headless autoplay on `.pmr` open, and a multi-file queue for chaining macros from AutoHotkey or batch scripts. See [What's new in this fork](#whats-new-in-this-fork) below.
 
 # What's new in this fork
-
-This fork ([wsnh2022/Py_RPA](https://github.com/wsnh2022/Py_RPA)) adds a workflow-oriented layer on top of upstream:
 
 ### 🌐 Fully offline — no network calls
 - The startup GitHub release check is removed.
@@ -61,61 +49,51 @@ A small always-on-top **● REC** indicator appears top-right while recording. I
 - `show_toast` no longer crashes when the system lacks `pkg_resources` (modern `setuptools`); the toast just silently no-ops.
 
 # Features
-- Very easy to use
-- Free. No limitations. No "premium" purchase.
-- Infinite repeat
-- Change speed
-- Interval
-- For
-- Schedule
-- Save, Load, Sharing
-- Universal Files (work with json).
-- After-playback options, e.g., Standby or shutdown computer.
-- Can choose from recording mouse movement, click and keyboard input
-- Custom Hotkey for starting a record and stop it, start playback and stop it
-- Mouse Movement, click, and keyboard recording.
-- Smooth recording of the mouse.
 
-# How does this work?
-To start recording, you simply have to press the red button\
-From there, you can move your mouse, click, and type on your keyboard, and everything will be recorded. (You can choose what will be recorded.)
-\
-\
-Then, to stop the recording, you simply click on the black square.\
-To play a recording, you just need to click on the green play icon
-And to stop the playback, press the `f3` key (By default).
+**Recording**
+- Mouse movement, clicks, scrolls, keyboard input — each toggleable.
+- Configurable global hotkeys to start/stop recording and playback.
+- Top-right **● REC** overlay while recording, with the Stop hotkey shown.
 
+**Playback**
+- Speed (0.1× – 10×), Repeat (finite or infinite), Delay between repeats.
+- Interval and For windows for time-bounded loops.
+- Scheduled start (seconds-from-midnight).
+- After-playback actions: Idle, Quit, Standby, Log off, Turn off, Restart, Hibernate.
 
-# Showcase
+**Files**
+- Save / Load `.pmr` (PyMacroRecord) and `.json` formats.
+- Folder-scan Library window with Run / Rename / Open folder / Delete.
+- Open a `.pmr` directly from Explorer to autoplay headlessly.
+- Pass multiple files in one launch to play a queue.
 
-## Windows
+**Other**
+- 13 UI languages.
+- System tray icon (skipped during headless autoplay).
 
-https://github.com/LOUDO56/PyMacroRecord/assets/117168736/ac77b7b6-02d0-4c12-a71a-65119c4acc59
+# Usage
 
-## Linux (X11)
-
-https://github.com/LOUDO56/PyMacroRecord/assets/117168736/25ab7c60-9f48-425f-bd5f-68c8b76e4c9c
+- **Record**: press the red button (or your Start-record hotkey). Stop with the black square or your Stop-record hotkey.
+- **Play**: press the green play icon. Stop with `F3` (default Stop-playback hotkey).
+- **Library**: `File → Library...` or `Ctrl+B`.
 
 
 # For bug reports or update requests
-If you encounter a bug or want to request an update, simply create an issue [here](https://github.com/LOUDO56/PyMacroRecord/issues)
+For issues with **this fork's additions**, open an issue at [wsnh2022/Py_RPA/issues](https://github.com/wsnh2022/Py_RPA/issues). For upstream behavior, see the [original project](https://github.com/LOUDO56/PyMacroRecord/issues).
 
 # Running from source
 
-- First, install [Python](https://www.python.org/downloads/)
-- Download the last source code release [here](https://github.com/LOUDO56/PyMacroRecord/releases)
-- Extract it wherever you want.
-- Open the terminal and type `cd <PATH TO SOFTWARE FOLDER>`
-- Install dependencies:
-  ```bash
-  pip3 install -r requirements.txt
-  ```
-  - On **Linux**, you might need to install Tkinter manually: `sudo apt install python3-tk` (or equivalent for your distro)
-  - On **Linux**, the app requires an **X11** session. Wayland is not supported.
-- Run:
-  ```bash
-  cd src && python3 main.py
-  ```
+```bash
+git clone https://github.com/wsnh2022/Py_RPA.git
+cd Py_RPA
+pip install -r requirements.txt
+cd src
+python main.py
+```
+
+- Requires [Python](https://www.python.org/downloads/) 3.10+.
+- **Linux**: install Tkinter (`sudo apt install python3-tk` or distro equivalent). X11 only — Wayland is not supported.
+- `main.py` `os.chdir`s to its own directory; always launch it from `src/`.
 
 # Build
 
@@ -154,29 +132,10 @@ build.bat
 
 The output will be in the `dist/` directory.
 
-# Support
-Developing a software is not an easy task. If you really like this project, please consider making a small donation, it really helps and means a lot! <3
-\
-\
-By making a donation, your name will appear in the "Donors" section of the PyMacroRecord software and among the last 5 donors on the [PyMacroRecord](https://www.pymacrorecord.com) website as a thank you!
-\
-\
-<a href='https://ko-fi.com/C0C41PJM6B' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 # License
 
-This program is under [GNU General Public License v3.0](https://github.com/LOUDO56/PyMacroRecord/blob/main/LICENSE.md)
+This program is under [GNU General Public License v3.0](LICENSE.md)
 
-# Special Thanks
+# Credits
 
-- Fooinys, who playtested my program.
-- <a href="https://github.com/Lenochxd">Lenoch</a>, for code enhancement.
-- <a href="https://github.com/takiem">Takiem</a> for the Italian and Brazilian-Portuguese translation.
-- <a href="https://github.com/DennyClarkson">DennyClarkson</a> for the Chinese-Simplified translation.
-- <a href="https://github.com/SerdarSaglam">SerdarSaglam</a> for the Turkish translation.
-- <a href="https://github.com/superstes">superstes</a> for the German translation.
-- <a href="https://github.com/SqlWaldorf">SqlWaldorf</a> for the Dutch translation.
-- <a href="https://github.com/jorge-sepulveda">jorge-sepulveda</a> for the Spanish translation.
-- <a href="https://github.com/expp121">expp121</a> for the Bulgarian translation
-- <a href="https://github.com/DvaMishkiLapa">DvaMishkiLapa</a> for the Russian translation.
-- <a href="https://github.com/sjw1980">sjw1980</a> for the Korean translation.
-- <a href="https://github.com/Mineeagle">Mineeagle</a> for the Esperanto translation.
+Based on [PyMacroRecord](https://github.com/LOUDO56/PyMacroRecord) by [LOUDO56](https://github.com/LOUDO56) and its translators / contributors.
