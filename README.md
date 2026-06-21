@@ -14,6 +14,52 @@
 PyMacroRecord works with a GUI made using tkinter, making it easier for users to interact with it.
 ![image](https://github.com/LOUDO56/PyMacroRecord/assets/117168736/2a1b2d0e-d950-40ad-84e2-971464058664)
 
+# What's new in this fork
+
+This fork ([wsnh2022/Py_RPA](https://github.com/wsnh2022/Py_RPA)) adds a workflow-oriented layer on top of upstream:
+
+### 🌐 Fully offline — no network calls
+- The startup GitHub release check is removed.
+- The Donors window no longer fetches over HTTP.
+- `requests` is dropped from `requirements.txt`.
+- The app never touches the internet — useful in air-gapped or privacy-sensitive environments.
+
+### 📁 Macro Library (folder-scan)
+A built-in browser for your saved macros. Open it from `File → Library...` or with **Ctrl+B**.
+- Points at any folder you choose (default: `%LOCALAPPDATA%\PyMacroRecord\macros` on Windows).
+- Lists every `.pmr` / `.json` file in that folder with **Name · Modified · Events · Path**, newest first.
+- **Run** (or double-click) — load + play the selected macro immediately.
+- **Rename** — renames the file on disk and updates references.
+- **Open folder** — reveals the file in Explorer / Finder / your file manager.
+- **Delete** — permanently removes the file (with confirmation).
+- **Change folder...** — point the Library at any directory; switches scan target.
+
+### 💾 Post-record Save / Cancel prompt
+When you stop a recording, the app asks whether to **Save** (defaults to the Library folder) or **Cancel** (discard). After Save, the Library opens automatically so you can run the recording right away.
+
+### 🚀 One-click autoplay from a `.pmr` file
+Set PyMacroRecord as the default app for `.pmr` files (or pass one as an argument) and:
+- The GUI **never paints** — no flash, no window.
+- The macro plays immediately, then the app exits.
+- Toggle: `Options → Settings → Auto-play when opened from a .pmr file` (default **on**).
+
+### 🔗 Multi-file queue for AutoHotkey / batch chaining
+Pass multiple files in one launch and they play in sequence — one cold start, then chained playback:
+
+```ahk
+exe := "C:\path\to\PyMacroRecord-portable.exe"
+RunWait('"' exe '" "macros\step1.pmr" "macros\step2.pmr" "macros\step3.pmr"')
+```
+
+Each file plays once in order; the app exits when the queue is empty. Much faster than running the exe per file (which incurs PyInstaller cold-start each time).
+
+### 🔴 Recording overlay
+A small always-on-top **● REC** indicator appears top-right while recording. It shows your configured **Stop record** hotkey so you can stop without restoring the main window or hunting for the tray icon. Disappears the moment recording stops.
+
+### 🐛 Stability fixes
+- Playback teardown moved to the main Tk thread — eliminates the post-playback "Not Responding" window on file-association launches.
+- `show_toast` no longer crashes when the system lacks `pkg_resources` (modern `setuptools`); the toast just silently no-ops.
+
 # Features
 - Very easy to use
 - Free. No limitations. No "premium" purchase.
