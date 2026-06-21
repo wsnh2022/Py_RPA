@@ -123,14 +123,19 @@ python setup_cx.py build
 The output will be in the `build/` directory.
 
 ### Portable
-Requirements: `PyInstaller`
+Requirements: a `.venv` in the repo root with `PyInstaller` installed. UPX is optional.
 
-Run
-```bash
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -r requirements.txt
 build.bat
 ```
 
-The output will be in the `dist/` directory.
+Output: `dist\PyMacroRecord-portable.exe`.
+
+- The script auto-skips UPX compression if `upx\upx.exe` is not present (build still succeeds, the exe is just larger).
+- To make a `.pmr` double-click play the macro headlessly, set this exe as the default app for `.pmr` files (right-click any `.pmr` -> Open with -> Choose another app -> browse to the exe -> "Always"). The `Auto-play on open` setting (default on) handles the rest.
 
 # License
 
