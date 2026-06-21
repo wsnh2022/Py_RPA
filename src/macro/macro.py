@@ -96,6 +96,10 @@ class Macro:
         if userSettings["Minimization"]["When_Recording"]:
             self.main_app.withdraw()
             Thread(target=lambda: show_notification_minim(self.main_app)).start()
+        # Top-right indicator with the Stop hotkey reminder. Shown regardless
+        # of minimization so the user always has a visible "you're recording"
+        # cue with the stop key.
+        self.main_app.after(0, self.main_app.show_recording_overlay)
         print("record started")
 
     def stop_record(self):
@@ -129,7 +133,13 @@ class Macro:
         if userSettings["Minimization"]["When_Recording"]:
             self.main_app.deiconify()
 
+        self.main_app.after(0, self.main_app.hide_recording_overlay)
+
         print("record stopped")
+
+        # Ask Save / Cancel after each recording (skipped if hotkey-driven stop
+        # used while a stale record was loaded — handled by post_record_prompt).
+        self.main_app.after(0, self.main_app.post_record_prompt)
 
     def start_playback(self):
         userSettings = self.user_settings.settings_dict
@@ -288,9 +298,12 @@ class Macro:
 
         self.unPressEverything(keyToUnpress)
         if userSettings["Playback"]["Repeat"]["Interval"] == 0 and userSettings["Playback"]["Repeat"]["For"] == 0 and repeat_count:
-            self.stop_playback()
-            if userSettings["Minimization"]["When_Playing"]:
-                self.main_app.deiconify()
+            # Hand teardown off to the main thread — Tk widgets can't be safely
+            # mutated from this worker, and a direct quit() races with pending
+            # widget configures, leaving the root in a "Not Responding" state.
+            self.main_app.after(0, self.stop_playback)
+            if userSettings["Minimization"]["When_Playing"] and not getattr(self.main_app, "_autoplay_active", False):
+                self.main_app.after(0, self.main_app.deiconify)
 
     def unPressEverything(self, keyToUnpress):
         for key in keyToUnpress:
@@ -313,8 +326,13 @@ class Macro:
         self.main_menu.file_menu.entryconfig(self.main_app.text_content["file_menu"]["save_as_text"], state=NORMAL)
         self.main_menu.file_menu.entryconfig(self.main_app.text_content["file_menu"]["new_text"], state=NORMAL)
         self.main_menu.file_menu.entryconfig(self.main_app.text_content["file_menu"]["load_text"], state=NORMAL)
-        if userSettings["Minimization"]["When_Playing"]:
+        if userSettings["Minimization"]["When_Playing"] and not getattr(self.main_app, "_autoplay_active", False):
             self.main_app.deiconify()
+        # If more macros are queued (multi-file launch), chain into the next
+        # one regardless of After_Playback mode.
+        if not playback_stopped_manually and getattr(self.main_app, "_macro_queue", None):
+            if self.main_app.play_next_in_queue():
+                return
         if userSettings["After_Playback"]["Mode"] != "Idle" and not playback_stopped_manually:
             if userSettings["After_Playback"]["Mode"].lower() == "standby":
                 if platform == "win32":

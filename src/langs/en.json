@@ -32,7 +32,34 @@
       "new_text": "New",
       "load_text": "Load",
       "save_text": "Save",
-      "save_as_text": "Save as"
+      "save_as_text": "Save as",
+      "library_text": "Library..."
+    },
+    "library": {
+      "title": "Macro Library",
+      "name_col": "Name",
+      "saved_at_col": "Modified",
+      "events_col": "Events",
+      "path_col": "Path",
+      "run_button": "Run",
+      "rename_button": "Rename",
+      "open_folder_button": "Open folder",
+      "delete_button": "Delete",
+      "close_button": "Close",
+      "change_folder_button": "Change folder...",
+      "refresh_button": "Refresh",
+      "choose_folder_title": "Choose macro folder",
+      "empty_text": "No .pmr or .json macros found in this folder.",
+      "missing_file": "(file missing)",
+      "rename_title": "Rename macro",
+      "rename_prompt": "Enter a new name (without extension):",
+      "rename_error": "Could not rename file.",
+      "delete_confirm_title": "Delete macro",
+      "delete_confirm": "Permanently delete \"{name}\"?",
+      "save_prompt_title": "Save recording?",
+      "save_prompt_text": "Recording finished. Save it to the Library, or discard?",
+      "save_button": "Save",
+      "discard_button": "Cancel"
     },
     "options_menu": {
       "options_text": "Options",
@@ -88,6 +115,7 @@
       "settings_menu": {
         "settings_text": "Settings",
         "always_import_macro_settings": "Always import macro settings",
+        "autoplay_on_open": "Auto-play when opened from a .pmr file",
         "lang_text": "Language",
         "lang_settings": {
           "title": "Language settings",

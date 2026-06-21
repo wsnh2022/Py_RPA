@@ -3,28 +3,29 @@ from sys import platform
 
 from utils.get_file import resource_path
 
-try:
-    from win10toast import ToastNotifier
-except Exception:
-    print("Not on windows. win10toast not imported.")
+_toast_notifier_cls = None
+if platform == "win32":
+    try:
+        from win10toast import ToastNotifier as _toast_notifier_cls
+    except Exception:
+        _toast_notifier_cls = None
 
 
 def show_notification_minim(main_app):
+    msg = main_app.text_content["options_menu"]["settings_menu"]["minimization_toast"]
     if platform == "win32":
-        from win10toast import ToastNotifier
-
-        toast = ToastNotifier()
+        if _toast_notifier_cls is None:
+            return
         try:
-            toast.show_toast(
+            _toast_notifier_cls().show_toast(
                 title="PyMacroRecord",
-                msg=main_app.text_content["options_menu"]["settings_menu"]["minimization_toast"],
+                msg=msg,
                 duration=3,
-                icon_path=resource_path(path.join("assets", "logo.ico"))
+                icon_path=resource_path(path.join("assets", "logo.ico")),
             )
-        except:
+        except Exception:
             pass
-
     elif "linux" in platform.lower():
-        system(f"""notify-send -u normal "PyMacroRecord" "{main_app.text_content["options_menu"]["settings_menu"]["minimization_toast"]}" """)
+        system(f'notify-send -u normal "PyMacroRecord" "{msg}"')
     elif "darwin" in platform.lower():
-        system(f"""osascript -e 'display notification "{main_app.text_content["options_menu"]["settings_menu"]["minimization_toast"]}" with title "PyMacroRecord"'""")
+        system(f"""osascript -e 'display notification "{msg}" with title "PyMacroRecord"'""")

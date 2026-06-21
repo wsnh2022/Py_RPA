@@ -17,9 +17,11 @@ class RecordFileManagement:
         if not self.main_app.macro_recorded or self.main_app.macro.playback:
             return
         self.main_app.prevent_record = True
+        library_folder = self.main_app.macro_library.folder()
         macroSaved = filedialog.asksaveasfile(
             filetypes=[("PyMacroRecord Files", "*.pmr"), ("Json Files", "*.json")],
             defaultextension=".pmr",
+            initialdir=library_folder,
         )
         if macroSaved is not None:
             self.main_app.current_file = macroSaved.name
@@ -48,6 +50,7 @@ class RecordFileManagement:
                 else:
                     json_macroEvents = dumps(macroData, indent=4)
                 current_file.write(json_macroEvents)
+            self.main_app.macro_saved = True
         else:
             self.save_macro_as()
 

@@ -1,12 +1,9 @@
 from sys import platform
-from threading import Thread
 from tkinter import BOTTOM, LEFT, TOP
 from tkinter import TclError
 from tkinter.font import Font
 from tkinter.ttk import Button, Frame, Label, Style
 from webbrowser import open_new
-
-from requests import RequestException, get
 
 from windows.popup import Popup
 
@@ -61,8 +58,9 @@ class Donors(Popup):
         self.pageArea = Frame(self)
         Button(self, text=main_app.text_content["global"]["close_button"], command=self.destroy).pack(side=BOTTOM, pady=5)
         self.donorsArea.pack(side=TOP)
-        Label(self.donorsArea, text=main_app.text_content["others_menu"]["donors_settings"]["load_donors"]).pack(side=TOP, pady=2)
-        Thread(target=self._fetch_donors, daemon=True).start()
+        # Offline build: no donor list fetch.
+        self.donors_list = []
+        self.after(0, self._on_donors_ready)
         self.wait_window()
         parent.prevent_record = False
 
@@ -91,19 +89,6 @@ class Donors(Popup):
         self.navigationArea.pack(side=BOTTOM)
         Label(self.pageArea, text=f'{main_app.text_content["others_menu"]["translators_settings"]["page"]} {page} / {maxPage}').pack(side=TOP, pady=2)
         self.pageArea.pack(side=BOTTOM)
-
-    def _fetch_donors(self):
-        donors_link = 'https://pymacrorecord.com/donors.txt'
-        try:
-            response = get(donors_link, timeout=10)
-            text = response.text if response is not None else ""
-            lst = [s.strip() for s in text.split(';') if s.strip()]
-            lst.reverse()
-            self.donors_list = lst
-        except RequestException:
-            self.donors_list = []
-        finally:
-            self.after(0, self._on_donors_ready)
 
     def _on_donors_ready(self):
         try:

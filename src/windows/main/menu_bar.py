@@ -29,6 +29,7 @@ class MenuBar(Menu):
         else:
             self.file_menu.add_command(label=self.text_config["file_menu"]["new_text"], state=DISABLED, accelerator="Ctrl+N")
         self.file_menu.add_command(label=self.text_config["file_menu"]["load_text"], accelerator="Ctrl+L", command=record_file_management.load_macro)
+        self.file_menu.add_command(label=self.text_config["file_menu"]["library_text"], accelerator="Ctrl+B", command=parent.open_library)
         self.file_menu.add_separator()
         if len(argv) > 1:
             self.file_menu.add_command(label=self.text_config["file_menu"]["save_text"], accelerator="Ctrl+S", command=record_file_management.save_macro)
@@ -75,8 +76,10 @@ class MenuBar(Menu):
         self.options_sub = Menu(self.options_menu, tearoff=0)
         self.compactJson = BooleanVar(value=userSettings["Saving"]["Compact_json"])
         self.always_import_macro_settings = BooleanVar(value=userSettings["Loading"]["Always_import_macro_settings"])
+        self.autoplay_on_open = BooleanVar(value=userSettings["Library"]["Autoplay_on_open"])
         self.options_sub.add_checkbutton(label=self.text_config["options_menu"]["json_compact"], command=lambda: settings.change_settings("Saving", "Compact_json"), variable=self.compactJson)
         self.options_sub.add_checkbutton(label=self.text_config["options_menu"]["settings_menu"]["always_import_macro_settings"], command=lambda: settings.change_settings("Loading", "Always_import_macro_settings"), variable=self.always_import_macro_settings)
+        self.options_sub.add_checkbutton(label=self.text_config["options_menu"]["settings_menu"]["autoplay_on_open"], command=lambda: settings.change_settings("Library", "Autoplay_on_open"), variable=self.autoplay_on_open)
         self.options_menu.add_cascade(label=self.text_config["options_menu"]["settings_menu"]["settings_text"], menu=self.options_sub)
         self.options_sub.add_command(label=self.text_config["options_menu"]["settings_menu"]["hotkeys_text"], command=lambda: Hotkeys(self, parent))
         self.options_sub.add_command(label=self.text_config["options_menu"]["settings_menu"]["lang_text"], command=lambda: SelectLanguage(self, parent))
@@ -96,8 +99,6 @@ class MenuBar(Menu):
         # Others Sub
         self.others_sub = Menu(self.options_menu, tearoff=0)
         self.options_menu.add_cascade(label=self.text_config["options_menu"]["others_menu"]["others_text"], menu=self.others_sub)
-        self.Check_update = BooleanVar(value=userSettings["Others"]["Check_update"])
-        self.others_sub.add_checkbutton(label=self.text_config["options_menu"]["others_menu"]["check_update_text"], variable=self.Check_update, command=lambda: settings.change_settings("Others", "Check_update"))
         self.others_sub.add_command(label=self.text_config["options_menu"]["others_menu"]["reset_settings_text"], command=settings.reset_settings)
 
         # Help section

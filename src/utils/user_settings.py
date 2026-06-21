@@ -91,6 +91,11 @@ class UserSettings:
                 "Check_update": True,
                 "Fixed_timestamp": 0,
                 "Remind_new_ver_at": 0,
+            },
+
+            "Library": {
+                "Folder": path.join(self.path_setting, "macros"),
+                "Autoplay_on_open": True,
             }
         }
 
@@ -167,4 +172,10 @@ class UserSettings:
             userSettings["Loading"] = {}
             if "Always_import_macro_settings" not in userSettings["Loading"]:
                 userSettings["Loading"]["Always_import_macro_settings"] = False
+        if "Library" not in userSettings or not isinstance(userSettings.get("Library"), dict):
+            userSettings["Library"] = {}
+        if not userSettings["Library"].get("Folder"):
+            userSettings["Library"]["Folder"] = path.join(self.path_setting, "macros")
+        if "Autoplay_on_open" not in userSettings["Library"]:
+            userSettings["Library"]["Autoplay_on_open"] = True
         self.update_settings()
