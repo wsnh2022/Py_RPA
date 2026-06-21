@@ -71,7 +71,7 @@ class MainApp(Window):
         # Resolve autoplay decision now that settings are loaded.
         autoplay = bool(macro_args) and self.settings.settings_dict["Library"]["Autoplay_on_open"]
         if macro_args and not autoplay:
-            # File launch but autoplay disabled — show the window.
+            # File launch but autoplay disabled - show the window.
             self.deiconify()
             self.attributes("-topmost", 1)
         self._autoplay_active = autoplay
@@ -140,7 +140,7 @@ class MainApp(Window):
         self.bind('<Control-b>', lambda _e: self.open_library())
 
         self.protocol("WM_DELETE_WINDOW", self.quit_software)
-        # Skip the tray icon when running headless — saves ~0.5s and avoids
+        # Skip the tray icon when running headless - saves ~0.5s and avoids
         # leaving a tray icon behind after auto-quit on some systems.
         self.icon = None
         if not self._autoplay_active:

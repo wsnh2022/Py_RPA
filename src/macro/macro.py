@@ -138,7 +138,7 @@ class Macro:
         print("record stopped")
 
         # Ask Save / Cancel after each recording (skipped if hotkey-driven stop
-        # used while a stale record was loaded — handled by post_record_prompt).
+        # used while a stale record was loaded - handled by post_record_prompt).
         self.main_app.after(0, self.main_app.post_record_prompt)
 
     def start_playback(self):
@@ -298,7 +298,7 @@ class Macro:
 
         self.unPressEverything(keyToUnpress)
         if userSettings["Playback"]["Repeat"]["Interval"] == 0 and userSettings["Playback"]["Repeat"]["For"] == 0 and repeat_count:
-            # Hand teardown off to the main thread — Tk widgets can't be safely
+            # Hand teardown off to the main thread - Tk widgets can't be safely
             # mutated from this worker, and a direct quit() races with pending
             # widget configures, leaving the root in a "Not Responding" state.
             self.main_app.after(0, self.stop_playback)
